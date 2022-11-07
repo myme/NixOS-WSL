@@ -10,6 +10,7 @@
 , which
 , defaultUser
 , automountPath
+, loginShell
 ,
 }:
 let
@@ -51,5 +52,5 @@ mkWrappedScript {
     wrapper
   ];
   username = defaultUser.name;
-  inherit automountPath;
+  inherit automountPath loginShell;
 }

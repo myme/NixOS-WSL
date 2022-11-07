@@ -123,6 +123,11 @@ main() {
   # Pass external environment but filter variables specific to root user.
   exportCmd="$(export -p | grep -vE ' (HOME|LOGNAME|SHELL|USER)=')"
 
+  # Wrap `command` in login shell, if defined.
+  if [ -n "@loginShell@" ]; then
+    command="@loginShell@ \"$command\""
+  fi
+
   run_in_namespace \
     systemd-run \
     --quiet \

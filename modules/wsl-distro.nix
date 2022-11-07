@@ -15,6 +15,17 @@ with lib; {
       description = "The name of the default user";
     };
     startMenuLaunchers = mkEnableOption "shortcuts for GUI applications in the windows start menu";
+    loginShell = mkOption {
+      type = str;
+      default = "";
+      description = "Login shell command prefix";
+      example = ''
+        loginShell =
+          let shell = config.users.users.''${defaultUser}.shell;
+              shellPath = "''${shell}''${shell.shellPath}";
+          in "''${shellPath} --login -c";
+      '';
+    };
   };
 
   config =
@@ -22,6 +33,7 @@ with lib; {
       cfg = config.wsl;
 
       syschdemd = pkgs.callPackage ../scripts/syschdemd.nix {
+        inherit (cfg) loginShell;
         automountPath = cfg.wslConf.automount.root;
         defaultUser = config.users.users.${cfg.defaultUser};
       };
